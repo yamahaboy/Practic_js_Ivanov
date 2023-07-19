@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 20px auto;
+  border: 2px solid;
+}
+
+input {
+  margin: 0.3rem;
+  padding: 0.5rem;
+  border: 2px solid purple;
+}
+
+#submitBtn {
+  margin: 0.3rem;
+  padding: 0.5rem;
+  border: 2px solid purple;
+  background-color: purple;
+  color: white;
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  width: 50%;
+}
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+#delete-all-btn {
+  display: none;
+}
+
+.error {
+  color: red;
+}
