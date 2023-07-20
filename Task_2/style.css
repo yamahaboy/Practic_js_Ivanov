@@ -109,3 +109,21 @@ ul {
 .text-block{
   font-size: 22px;
 }
+
+#editModal{
+  display: none;
+}
+
+#editSubmitBtn{
+  border: 2px solid purple;
+  background-color: rgb(215, 19, 215);
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  border-radius: 10px;
+  width: 10%;
+  cursor: pointer;
+}
+
+
+

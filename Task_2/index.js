@@ -1,4 +1,3 @@
-let data = [];
 const drawToDo = (data, toDoTable) => {
   toDoTable.innerHTML = "";
 
@@ -73,7 +72,7 @@ const closeModal = () => {
   modal.style.display = "none";
 };
 
-const populateModalFields = (title, description) => {
+const showModal = (title, description) => {
   const editTitle = document.querySelector("#editTitle");
   const editDescription = document.querySelector("#editDescription");
 
@@ -88,7 +87,7 @@ const editHandler = (event, data, toDoTable) => {
     const selectedItem = data.find((item) => item.id === toDoId);
     if (selectedItem) {
       openModal();
-      populateModalFields(selectedItem.title, selectedItem.description);
+      showModal(selectedItem.title, selectedItem.description);
 
       const editSubmitBtn = document.querySelector("#editSubmitBtn");
       editSubmitBtn.addEventListener("click", () => {
@@ -109,7 +108,7 @@ const editHandler = (event, data, toDoTable) => {
 };
 
 const init = () => {
-  // let data = [];
+  let data = [];
   const submitBtn = document.querySelector("#submitBtn");
   const toDoTable = document.querySelector("#toDo-table");
 
