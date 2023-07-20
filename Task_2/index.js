@@ -1,13 +1,18 @@
-const drawToDO = (data, toDOTable) => {
-  toDOTable.innerHTML = "";
+let data = [];
+const drawToDo = (data, toDoTable) => {
+  toDoTable.innerHTML = "";
 
   data.forEach((item) => {
-    toDOTable.innerHTML += `
+    toDoTable.innerHTML += `
     <li class='toDo-card'id="${item.id}">
+    <div class="text-block">
     <div>Title:${item.title}</div>
     <div>Description:${item.description}</div>
-    <div><button class="edit-card">Edit</button></div>
+    </div>
+    <div class="button-block">
+    <div><button class="edit-card" id="edit-card">Edit</button></div>
     <div><button class="delete-card">DELETE</button></div>
+    </div>
   </li>`;
   });
 };
@@ -49,18 +54,64 @@ const submitHandler = () => {
 };
 
 const deleteHandler = (event, data) => {
-  const li = event.target.closest(".toDo-card");
-  const toDo = +li.id;
+  if (event.target.classList.contains("delete-card")) {
+    const li = event.target.closest(".toDo-card");
+    const toDoId = +li.id;
+    const newData = data.filter((item) => item.id !== toDoId);
+    return newData;
+  }
+  return data;
+};
 
-  const newData = data.filter((item) => item.id !== toDo);
+const openModal = () => {
+  const modal = document.querySelector("#editModal");
+  modal.style.display = "block";
+};
 
-  return newData;
+const closeModal = () => {
+  const modal = document.querySelector("#editModal");
+  modal.style.display = "none";
+};
+
+const populateModalFields = (title, description) => {
+  const editTitle = document.querySelector("#editTitle");
+  const editDescription = document.querySelector("#editDescription");
+
+  editTitle.value = title;
+  editDescription.value = description;
+};
+
+const editHandler = (event, data, toDoTable) => {
+  if (event.target.classList.contains("edit-card")) {
+    const li = event.target.closest(".toDo-card");
+    const toDoId = +li.id;
+    const selectedItem = data.find((item) => item.id === toDoId);
+    if (selectedItem) {
+      openModal();
+      populateModalFields(selectedItem.title, selectedItem.description);
+
+      const editSubmitBtn = document.querySelector("#editSubmitBtn");
+      editSubmitBtn.addEventListener("click", () => {
+        const editedTitle = document.querySelector("#editTitle").value;
+        const editedDescription =
+          document.querySelector("#editDescription").value;
+        const editedData = data.map((item) =>
+          item.id === toDoId
+            ? { ...item, title: editedTitle, description: editedDescription }
+            : item
+        );
+        data = editedData;
+        drawToDo(data, toDoTable);
+        closeModal();
+      });
+    }
+  }
 };
 
 const init = () => {
-  let data = [];
+  // let data = [];
   const submitBtn = document.querySelector("#submitBtn");
-  const toDOTable = document.querySelector("#toDo-table");
+  const toDoTable = document.querySelector("#toDo-table");
 
   submitBtn.addEventListener("click", (event) => {
     event.preventDefault();
@@ -68,18 +119,15 @@ const init = () => {
     const user = submitHandler();
     if (user) {
       data.push(user);
-      drawToDO(data, toDOTable);
+      drawToDo(data, toDoTable);
     }
   });
 
-  toDOTable.addEventListener("click", (event) => {
-    if (event.target.classList.contains("delete-card")) {
-      const newData = deleteHandler(event, data);
-
-      data = newData;
-
-      drawToDO(data, toDOTable);
-    }
+  toDoTable.addEventListener("click", (event) => {
+    const newData = deleteHandler(event, data);
+    data = newData;
+    drawToDo(data, toDoTable);
+    editHandler(event, data, toDoTable);
   });
 };
 

@@ -8,7 +8,7 @@
   </head>
   <body>
     <form id="user-form">
-      <div>ToDo form</div>
+      <div class="form-name">ToDo form</div>
       <input type="text" placeholder="Title:" id="title" />
       <div class="error" id="title-error"></div>
       <input type="text" placeholder="Description:" id="description" />
@@ -16,6 +16,11 @@
       <button id="submitBtn">Submit</button>
     </form>
     <div class="table"><ul id="toDo-table"></ul></div>
+    <div id="editModal" style="display: none">
+      <input type="text" id="editTitle" />
+      <input type="text" id="editDescription" />
+      <button id="editSubmitBtn">Save Changes</button>
+    </div>
     <script src="./index.js"></script>
   </body>
 </html>
