@@ -1,18 +1,21 @@
+let data = [];
+let toDoTable;
+
 const drawToDo = (data, toDoTable) => {
   toDoTable.innerHTML = "";
 
   data.forEach((item) => {
     toDoTable.innerHTML += `
-    <li class='toDo-card'id="${item.id}">
-    <div class="text-block">
-    <div>Title:${item.title}</div>
-    <div>Description:${item.description}</div>
-    </div>
-    <div class="button-block">
-    <div><button class="edit-card" id="edit-card">Edit</button></div>
-    <div><button class="delete-card">DELETE</button></div>
-    </div>
-  </li>`;
+      <li class='toDo-card' id="${item.id}">
+        <div class="text-block">
+          <div>Title: ${item.title}</div>
+          <div>Description: ${item.description}</div>
+        </div>
+        <div class="button-block">
+          <div><button class="edit-card" id="edit-${item.id}">Edit</button></div>
+          <div><button class="delete-card">DELETE</button></div>
+        </div>
+      </li>`;
   });
 };
 
@@ -28,38 +31,39 @@ const submitHandler = () => {
 
   let isValid = true;
 
-  switch (true) {
-    case title.value.trim() === "":
-      titleError.textContent = "* Invalid input data";
-      isValid = false;
-      break;
+  if (title.value.trim() === "") {
+    titleError.textContent = "* Invalid input data";
+    isValid = false;
+  }
 
-    case description.value.trim() === "":
-      descriptionError.textContent = "* Invalid input data";
-      isValid = false;
-      break;
+  if (description.value.trim() === "") {
+    descriptionError.textContent = "* Invalid input data";
+    isValid = false;
   }
 
   if (!isValid) {
     return null;
   }
 
-  const toDO = {
+  const toDo = {
     id: Date.now(),
     title: title.value,
     description: description.value,
   };
-  return toDO;
+
+  title.value = "";
+  description.value = "";
+
+  return toDo;
 };
 
-const deleteHandler = (event, data) => {
+const deleteHandler = (event) => {
   if (event.target.classList.contains("delete-card")) {
     const li = event.target.closest(".toDo-card");
     const toDoId = +li.id;
-    const newData = data.filter((item) => item.id !== toDoId);
-    return newData;
+    data = data.filter((item) => item.id !== toDoId);
+    drawToDo(data, toDoTable);
   }
-  return data;
 };
 
 const openModal = () => {
@@ -80,53 +84,45 @@ const showModal = (title, description) => {
   editDescription.value = description;
 };
 
-const editHandler = (event, data, toDoTable) => {
-  if (event.target.classList.contains("edit-card")) {
-    const li = event.target.closest(".toDo-card");
-    const toDoId = +li.id;
-    const selectedItem = data.find((item) => item.id === toDoId);
-    if (selectedItem) {
-      openModal();
-      showModal(selectedItem.title, selectedItem.description);
-
-      const editSubmitBtn = document.querySelector("#editSubmitBtn");
-      editSubmitBtn.addEventListener("click", () => {
-        const editedTitle = document.querySelector("#editTitle").value;
-        const editedDescription =
-          document.querySelector("#editDescription").value;
-        const editedData = data.map((item) =>
-          item.id === toDoId
-            ? { ...item, title: editedTitle, description: editedDescription }
-            : item
-        );
-        data = editedData;
-        drawToDo(data, toDoTable);
-        closeModal();
-      });
-    }
-  }
-};
-
 const init = () => {
-  let data = [];
+  toDoTable = document.querySelector("#toDo-table");
+
   const submitBtn = document.querySelector("#submitBtn");
-  const toDoTable = document.querySelector("#toDo-table");
+  const editSubmitBtn = document.querySelector("#editSubmitBtn");
 
   submitBtn.addEventListener("click", (event) => {
     event.preventDefault();
 
-    const user = submitHandler();
-    if (user) {
-      data.push(user);
+    const toDo = submitHandler();
+    if (toDo) {
+      data.push(toDo);
       drawToDo(data, toDoTable);
     }
   });
 
   toDoTable.addEventListener("click", (event) => {
-    const newData = deleteHandler(event, data);
-    data = newData;
-    drawToDo(data, toDoTable);
-    editHandler(event, data, toDoTable);
+    deleteHandler(event);
+    if (event.target.classList.contains("edit-card")) {
+      const li = event.target.closest(".toDo-card");
+      const toDoId = +li.id;
+      const toDo = data.find((item) => item.id === toDoId);
+      showModal(toDo.title, toDo.description);
+      openModal();
+    }
+  });
+
+  editSubmitBtn.addEventListener("click", () => {
+    const editTitle = document.querySelector("#editTitle").value;
+    const editDescription = document.querySelector("#editDescription").value;
+
+    const toDoId = +document.querySelector(".edit-card").id.split("-")[1];
+    const index = data.findIndex((item) => item.id === toDoId);
+    if (index !== -1) {
+      data[index].title = editTitle;
+      data[index].description = editDescription;
+      drawToDo(data, toDoTable);
+      closeModal();
+    }
   });
 };
 
