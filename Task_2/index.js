@@ -1,5 +1,6 @@
 let data = [];
 let toDoTable;
+let currentToDoId = null;
 
 const drawToDo = (data, toDoTable) => {
   toDoTable.innerHTML = "";
@@ -66,7 +67,8 @@ const deleteHandler = (event) => {
   }
 };
 
-const openModal = () => {
+const openModal = (toDoId) => {
+  currentToDoId = toDoId;
   const modal = document.querySelector("#editModal");
   modal.style.display = "block";
 };
@@ -107,7 +109,7 @@ const init = () => {
       const toDoId = +li.id;
       const toDo = data.find((item) => item.id === toDoId);
       showModal(toDo.title, toDo.description);
-      openModal();
+      openModal(toDoId);
     }
   });
 
@@ -115,11 +117,11 @@ const init = () => {
     const editTitle = document.querySelector("#editTitle").value;
     const editDescription = document.querySelector("#editDescription").value;
 
-    const toDoId = +document.querySelector(".edit-card").id.split("-")[1];
-    const index = data.findIndex((item) => item.id === toDoId);
-    if (index !== -1) {
-      data[index].title = editTitle;
-      data[index].description = editDescription;
+    const toDoItem = data.find((item) => item.id === currentToDoId);
+
+    if (toDoItem) {
+      toDoItem.title = editTitle;
+      toDoItem.description = editDescription;
       drawToDo(data, toDoTable);
       closeModal();
     }
