@@ -1,0 +1,75 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto;
+    border: 2px solid;
+  }
+  
+  input {
+    margin: 0.3rem;
+    padding: 0.5rem;
+    border: 2px solid purple;
+  }
+  
+  #submitBtn {
+    margin: 0.3rem;
+    padding: 0.5rem;
+    border: 2px solid purple;
+    background-color: purple;
+    color: white;
+    cursor: pointer;
+  }
+  
+  ul {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto;
+    padding: 1rem;
+    border: 2px solid purple;
+    list-style: none;
+  }
+  
+  .card {
+    margin: 0.3rem;
+    padding: 0.5rem;
+    border: 2px solid purple;
+    border-radius: 3px;
+  }
+  
+  .modalWrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    /* display: none; */
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(132, 197, 255, 0.5);
+  }
+  
+  .modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    padding: 1rem;
+    background-color: white;
+    border: 2px solid purple;
+    border-radius: 3px;
+  }
+  
+  .toggleModal {
+    display: none;
+  }

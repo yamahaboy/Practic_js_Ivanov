@@ -19,8 +19,35 @@
       <div class="error" id="wordDate-error"></div>
       <button id="submitBtn">Submit</button>
     </form>
-    <table id="pesonal-table"></table>
-    <div id="deleteAllBtn"><button>Delete All</button></div>
+    <table id="pesonal-table">
+      <thead>
+        <tr>
+          <td><input type="checkbox" id="check" /></td>
+          <td>Name</td>
+          <td>Surname</td>
+          <td>Salary<button id="sortBySalary">Sort</button></td>
+          <td>Date of work start:<button id="sortByWorkDate">Sort</button></td>
+        </tr>
+      </thead>
+    </table>
+    <div id="deleteAllBtn"><button>Fire everyone</button></div>
+    <div id="deletePerson"><button>Fire</button></div>
+    <div id="editPerson"><button>Edit Person</button></div>
+    <div class="modalWrapper toggleModal">
+      <div class="modal">
+        <h3>Edit Modal</h3>
+        <input type="text" placeholder="Name:" id="editName" />
+        <input type="text" placeholder="Surname:" id="editSurname" />
+        <input type="number" placeholder="Salary:" id="editSalary" />
+        <input
+          type="date"
+          placeholder="Data of work start:"
+          id="editWordDate"
+        />
+        <button id="editBtn">Save</button>
+        <button id="closeBtn">X</button>
+      </div>
+    </div>
     <script src="./index.js"></script>
   </body>
 </html>
