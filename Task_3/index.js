@@ -1,18 +1,5 @@
 const drawUsers = (data, personalTable) => {
-  personalTable.innerHTML = `
-  <thead>
-        <tr>
-          <td></td>
-          <td>Name</td>
-          <td>Surname</td>
-          <td>Salary <button id="sortBySalary">Sort
-          </button></td>
-          <td>Date of work start: <button id="sortByWorkDate">Sort
-         </button></td>
-        </tr>
-      </thead>
-      `;
-
+  personalTable.innerHTML = ``;
   data.forEach((item) => {
     personalTable.innerHTML += `
           <tbody>
@@ -36,6 +23,7 @@ const drawUsers = (data, personalTable) => {
 };
 
 const submitHandler = () => {
+  const form = document.querySelector("#pesonal-form");
   const name = document.querySelector("#name");
   const surname = document.querySelector("#surname");
   const salary = document.querySelector("#salary");
@@ -85,16 +73,14 @@ const submitHandler = () => {
     salary: salary.value,
     wordDate: wordDate.value,
   };
-  name.value = "";
-  surname.value = "";
-  salary.value = "";
-  wordDate.value = "";
+
+  form.reset();
 
   return person;
 };
 
 const sortBySalary = (data, currentSortOrder) => {
-  return data.slice().sort((a, b) => {
+  data.sort((a, b) => {
     if (currentSortOrder === "asc") {
       return b.salary - a.salary;
     } else {
@@ -104,7 +90,7 @@ const sortBySalary = (data, currentSortOrder) => {
 };
 
 const sortByWorkDate = (data, currentSortOrder) => {
-  return data.slice().sort((a, b) => {
+  return data.sort((a, b) => {
     const dateA = new Date(a.wordDate);
     const dateB = new Date(b.wordDate);
 
@@ -126,7 +112,7 @@ const toggleModal = (data, card) => {
 };
 
 const editBtnHandler = (data, card) => {
-  const personalTable = document.querySelector("#personal-table");
+  const personalTable = document.querySelector("#table-body");
   const cardIndex = data.findIndex((item) => item.id === card.id);
 
   data.splice(cardIndex, 1, {
@@ -137,19 +123,19 @@ const editBtnHandler = (data, card) => {
     wordDate: editWordDate.value,
   });
 
-
   toggleModal(data, card);
   drawUsers(data, personalTable);
 };
 
 const getSelectedPersonId = (personalTable) => {
+  // checked checkboxes
   const checkboxes = personalTable.querySelectorAll(
-    ".users input[type='checkbox']"
+    ".users input[type='checkbox']:checked"
   );
   let selectedCardId = null;
 
   checkboxes.forEach((checkbox) => {
-    if (checkbox.checked) {
+    if (checkboxes) {
       selectedCardId = +checkbox.closest(".users").id;
     }
   });
@@ -181,7 +167,8 @@ const init = () => {
   let data = [];
   let currentSortOrder = "asc";
   const submitBtn = document.querySelector("#submitBtn");
-  const personalTable = document.querySelector("#pesonal-table");
+  const personalTable = document.querySelector("#table-body");
+  const thead = document.querySelector("#thead");
   const deleteAllBtn = document.querySelector("#deleteAllBtn");
   const deletePersonBtn = document.querySelector("#deletePerson");
   const closeBtn = document.querySelector("#closeBtn");
@@ -197,18 +184,18 @@ const init = () => {
     }
   });
 
-  personalTable.addEventListener("click", (event) => {
+  thead.addEventListener("click", (event) => {
     if (event.target.matches("#sortBySalary")) {
       currentSortOrder = currentSortOrder === "asc" ? "desc" : "asc";
 
-      data = sortBySalary(data, currentSortOrder);
-      drawUsers(data, personalTable, currentSortOrder);
+      sortBySalary(data, currentSortOrder);
+      drawUsers(data, personalTable);
     }
     if (event.target.matches("#sortByWorkDate")) {
       currentSortOrder = currentSortOrder === "asc" ? "desc" : "asc";
 
       data = sortByWorkDate(data, currentSortOrder);
-      drawUsers(data, personalTable, currentSortOrder);
+      drawUsers(data, personalTable);
     }
   });
 
@@ -223,13 +210,20 @@ const init = () => {
   });
 
   editPersonBtn.addEventListener("click", () => {
-    const checkboxes = personalTable.querySelectorAll(
-      ".users input[type='checkbox']"
-    );
+    const checkboxes = [
+      ...personalTable.querySelectorAll(
+        ".users input[type='checkbox']:checked"
+      ),
+    ];
+
+    if (checkboxes.length > 1) {
+      alert("Please select one person to edit.");
+      return;
+    }
     let selectedCheckboxCount = null;
 
     checkboxes.forEach((checkbox) => {
-      if (checkbox.checked) {
+      if (checkboxes) {
         selectedCheckboxCount++;
       }
     });
@@ -239,10 +233,10 @@ const init = () => {
       return;
     }
 
-    toggleModal();
-
     const cardId = getSelectedPersonId(personalTable);
     const card = data.find((item) => item.id === cardId);
+
+    toggleModal(data, card);
 
     editName.value = card.name;
     editSurname.value = card.surname;
