@@ -76,6 +76,10 @@ const submitHandler = () => {
 
   form.reset();
 
+  let data = getDataFromLocalStorage();
+  data.push(person);
+  saveDataToLocalStorage(data);
+
   return person;
 };
 
@@ -90,7 +94,7 @@ const sortBySalary = (data, currentSortOrder) => {
 };
 
 const sortByWorkDate = (data, currentSortOrder) => {
-  return data.sort((a, b) => {
+  return data.slice().sort((a, b) => {
     const dateA = new Date(a.wordDate);
     const dateB = new Date(b.wordDate);
 
@@ -125,17 +129,17 @@ const editBtnHandler = (data, card) => {
 
   toggleModal(data, card);
   drawUsers(data, personalTable);
+  saveDataToLocalStorage(data);
 };
 
 const getSelectedPersonId = (personalTable) => {
-  // checked checkboxes
   const checkboxes = personalTable.querySelectorAll(
     ".users input[type='checkbox']:checked"
   );
   let selectedCardId = null;
 
   checkboxes.forEach((checkbox) => {
-    if (checkboxes) {
+    if (checkbox.checked) {
       selectedCardId = +checkbox.closest(".users").id;
     }
   });
@@ -161,10 +165,29 @@ const deletePersons = (data, personalTable) => {
     data = data.filter((person) => person.id !== parseInt(id));
   });
 
+  saveDataToLocalStorage(data);
+
   return data;
 };
+
+const getDataFromLocalStorage = () => {
+  const dataLocalStorage = localStorage.getItem("data");
+  return JSON.parse(dataLocalStorage) || [];
+};
+
+const saveDataToLocalStorage = (data) => {
+  localStorage.setItem("data", JSON.stringify(data));
+};
+const showBanner = () => {
+  const banner = document.getElementById("banner");
+  banner.classList.remove("hide");
+  setTimeout(() => {
+    banner.classList.add("hide");
+  }, 5000);
+};
+
 const init = () => {
-  let data = [];
+  let data = getDataFromLocalStorage();
   let currentSortOrder = "asc";
   const submitBtn = document.querySelector("#submitBtn");
   const personalTable = document.querySelector("#table-body");
@@ -173,6 +196,10 @@ const init = () => {
   const deletePersonBtn = document.querySelector("#deletePerson");
   const closeBtn = document.querySelector("#closeBtn");
   const editPersonBtn = document.querySelector("#editPerson");
+  const sortBySalaryBtn = document.querySelector("#sortBySalary");
+  const sortByWorkDateBtn = document.querySelector("#sortByWorkDate");
+
+  drawUsers(data, personalTable, currentSortOrder);
 
   submitBtn.addEventListener("click", (event) => {
     event.preventDefault();
@@ -184,11 +211,27 @@ const init = () => {
     }
   });
 
+  sortBySalaryBtn.addEventListener("click", () => {
+    currentSortOrder = currentSortOrder === "asc" ? "desc" : "asc";
+    sortBySalary(data, currentSortOrder);
+    drawUsers(data, personalTable, currentSortOrder);
+    sortBySalaryBtn.classList.toggle("asc");
+  });
+
+  sortByWorkDateBtn.addEventListener("click", () => {
+    currentSortOrder = currentSortOrder === "asc" ? "desc" : "asc";
+    data = sortByWorkDate(data, currentSortOrder);
+    drawUsers(data, personalTable, currentSortOrder);
+    sortByWorkDateBtn.classList.toggle("asc");
+  });
+
   thead.addEventListener("click", (event) => {
+    console.log(event.target.matches("#sortBySalary"));
     if (event.target.matches("#sortBySalary")) {
       currentSortOrder = currentSortOrder === "asc" ? "desc" : "asc";
 
       sortBySalary(data, currentSortOrder);
+      console.log(data);
       drawUsers(data, personalTable);
     }
     if (event.target.matches("#sortByWorkDate")) {
@@ -202,6 +245,7 @@ const init = () => {
   deleteAllBtn.addEventListener("click", () => {
     data = [];
     drawUsers(data, personalTable);
+    saveDataToLocalStorage(data);
   });
 
   deletePersonBtn.addEventListener("click", () => {
@@ -223,7 +267,7 @@ const init = () => {
     let selectedCheckboxCount = null;
 
     checkboxes.forEach((checkbox) => {
-      if (checkboxes) {
+      if (checkbox.checked) {
         selectedCheckboxCount++;
       }
     });
@@ -255,4 +299,7 @@ const init = () => {
   });
 };
 
-init();
+window.onload = () => {
+  showBanner();
+  init();
+};

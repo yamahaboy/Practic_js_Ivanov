@@ -28,7 +28,21 @@ input {
   cursor: pointer;
 }
 
-#submitBtn {
+.common-btn-style {
+  margin: 0.3rem;
+  padding: 0.5rem;
+  border: 2px solid purple;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#submitBtn,
+#editBtn,
+#closeBtn,
+#deleteAllBtn,
+#deletePerson,
+#editPerson {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -95,7 +109,6 @@ input {
   bottom: 0;
   left: 0;
   z-index: 1;
-  /* display: none; */
   width: 100vw;
   height: 100vh;
   background-color: rgba(132, 197, 255, 0.5);
@@ -116,5 +129,38 @@ input {
 .toggleModal {
   display: none;
 }
+.hide {
+  display: none;
+}
 
+#banner {
+  background-color: #f44336;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.sort-icon {
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
 
+.sort-up {
+  display: none;
+}
+
+.sort-down {
+  display: inline-block;
+}
+
+.sort-btn.asc .sort-up {
+  display: inline-block;
+}
+
+.sort-btn.asc .sort-down {
+  display: none;
+}

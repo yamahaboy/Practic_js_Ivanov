@@ -17,7 +17,7 @@
       <div class="error" id="salary-error"></div>
       <input type="date" placeholder="Data of work start:" id="wordDate" />
       <div class="error" id="wordDate-error"></div>
-      <button id="submitBtn">Submit</button>
+      <button id="submitBtn" class="common-btn-style">Submit</button>
     </form>
     <table id="pesonal-table">
       <thead id="thead">
@@ -25,15 +25,31 @@
           <td><input type="checkbox" id="check" /></td>
           <td>Name</td>
           <td>Surname</td>
-          <td>Salary<button id="sortBySalary">Sort</button></td>
-          <td>Date of work start:<button id="sortByWorkDate">Sort</button></td>
+          <td>
+            <button id="sortBySalary" class="sort-btn">
+              <img src="img/arrowUp.svg" class="sort-icon sort-up" />
+              <img src="img/arrowDown.svg" class="sort-icon sort-down" />
+              Salary
+            </button>
+          </td>
+          <td>
+            <button id="sortByWorkDate" class="sort-btn">
+              <img src="img/arrowUp.svg" class="sort-icon sort-up" />
+              <img src="img/arrowDown.svg" class="sort-icon sort-down" />
+              Date of work start
+            </button>
+          </td>
         </tr>
       </thead>
       <tbody id="table-body"></tbody>
     </table>
-    <div id="deleteAllBtn"><button>Fire everyone</button></div>
-    <div id="deletePerson"><button>Fire</button></div>
-    <div id="editPerson"><button>Edit Person</button></div>
+    <div>
+      <button id="deleteAllBtn" class="common-btn-style">Fire everyone</button>
+    </div>
+    <div><button id="deletePerson" class="common-btn-style">Fire</button></div>
+    <div>
+      <button id="editPerson" class="common-btn-style">Edit Person</button>
+    </div>
     <div class="modalWrapper toggleModal">
       <div class="modal">
         <h3>Edit Modal</h3>
@@ -45,11 +61,13 @@
           placeholder="Data of work start:"
           id="editWordDate"
         />
-        <button id="editBtn">Save</button>
-        <button id="closeBtn">X</button>
+        <button id="editBtn" class="common-btn-style">Save</button>
+        <button id="closeBtn" class="common-btn-style">X</button>
       </div>
+    </div>
+    <div id="banner" class="hide">
+      <h2>We fire!!!</h2>
     </div>
     <script src="./index.js"></script>
   </body>
 </html>
-
